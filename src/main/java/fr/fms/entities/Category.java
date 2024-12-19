@@ -1,21 +1,18 @@
 package fr.fms.entities;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor @ToString
-public class Article implements Serializable{
-
+public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -23,15 +20,14 @@ public class Article implements Serializable{
     private Long id;
 
     @NotNull
-    @Size(min=10,max=50)
-    private String description;
+    private String name;
 
-    @DecimalMin("50")
-    private double price;
+    @OneToMany
+    private List<Article> articles;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
 }

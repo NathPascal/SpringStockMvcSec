@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Catégories</title>
+  <link rel="stylesheet" href="../static/bootstrap.min.css" th:href="@{bootstrap.min.css}">
+  <!--<link rel="stylesheet" href="../static/style.css" th:href="@{style.css}">-->
+</head>
+
+<body>
+<div layout:fragment="content">
+  <div class="container mt-5">
+    <div class="mb-3">
+      <nav>
+        <ul class="pagination justify-content-center">
+          <li th:each="category : ${categories}" class="page-item">
+            <a th:href="@{/category(id=${category.id})}" th:text="${category.name}" class="page-link"></a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+</body>
+</html>

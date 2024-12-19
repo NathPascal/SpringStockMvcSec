@@ -12,48 +12,58 @@
 <body>
 <div layout:fragment="content">
     <div class="container mt-5">
-        <div class="card">
-            <div class="card-header bg-info">Liste des articles</div>
-            <div class="card-body">
-                <form th:action="@{/index}" method="get" class="mb-3">
-                    <div class="row g-2">
-                        <div class="col-md-8">
-                            <label class="form-label">Keyword</label>
-                            <input type="text" name="keyword" th:value="${keyword}" class="form-control">
+        <div class="mb-3">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li th:each="category : ${categories}" class="page-item">
+                        <a th:href="@{/category(id=${category.id})}" th:text="${category.name}" class="page-link"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-header bg-info">Liste des articles</div>
+                <div class="card-body">
+                    <form th:action="@{/index}" method="get" class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-md-8">
+                                <label class="form-label">Keyword</label>
+                                <input type="text" name="keyword" th:value="${keyword}" class="form-control">
+                            </div>
+                            <div class="col-md-4 align-self-end">
+                                <button type="submit" class="btn btn-info w-100">Search</button>
+                            </div>
                         </div>
-                        <div class="col-md-4 align-self-end">
-                            <button type="submit" class="btn btn-info w-100">Search</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
 
+                </div>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Id</th>
+                        <th>Description</th>
+                        <th>Prix</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr th:each="a : ${listArticle}">
+                        <td th:text="${a.id}"></td>
+                        <td th:text="${a.description}"></td>
+                        <td th:text="${a.price}"></td>
+                        <td>
+                            <a th:href="@{/delete(id=${a.id}, page=${currentPage}, keyword=${keyword})}"
+                               class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                </table>
+                <ul class="pagination justify-content-center">
+                    <li th:class="${currentPage==status.index}?'active':''" th:each="page, status:${pages}"
+                        class="page-item"><a
+                            th:href="@{/index(page=${status.index},keyword=${keyword})}" th:text="${status.index}"
+                            class="page-link"></a></li>
+                </ul>
             </div>
-            <table class="table table-striped">
-                <tr>
-                    <th>Id</th>
-                    <th>Description</th>
-                    <th>Prix</th>
-                    <th>Actions</th>
-                </tr>
-                <tr th:each="a : ${listArticle}">
-                    <td th:text="${a.id}"></td>
-                    <td th:text="${a.description}"></td>
-                    <td th:text="${a.price}"></td>
-                    <td>
-                        <a th:href="@{/delete(id=${a.id}, page=${currentPage}, keyword=${keyword})}"
-                           class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-            </table>
-            <ul class="pagination justify-content-center">
-                <li th:class="${currentPage==status.index}?'active':''" th:each="page, status:${pages}"
-                    class="page-item"><a
-                        th:href="@{/index(page=${status.index},keyword=${keyword})}" th:text="${status.index}"
-                        class="page-link"></a></li>
-            </ul>
         </div>
     </div>
-</div>
 
 </body>
 </html>
