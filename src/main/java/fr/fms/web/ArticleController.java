@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.List;
+
 
 
 @Controller
@@ -28,14 +28,21 @@ public class ArticleController {
 
     @GetMapping("/index")
     public String index(Model model, @RequestParam(name="page", defaultValue = "0") int page,
-                                     @RequestParam(name = "keyword", defaultValue = "") String kw) {
-        //List<Article> articles = articleRepository.findAll();
-        Page<Article> articles = articleRepository.findByDescriptionContains(kw, PageRequest.of(page, 5));
-        model.addAttribute("listArticle",articles.getContent());
-        model.addAttribute("pages", new int[articles.getTotalPages()]);
-        model.addAttribute("currentPage",page);
-        model.addAttribute("keyword",kw);
+                        @RequestParam(name = "keyword", defaultValue = "") String kw,
+                        @RequestParam(name = "categoryId", required = false) Long categoryId) {
+        Page<Article> articles;
+        if (categoryId != null) {
+            Category category = categoryRepository.findById(categoryId).orElse(null);
+            articles = articleRepository.findByCategoryAndDescriptionContains(category, kw, PageRequest.of(page, 5));
+        } else {
+            articles = articleRepository.findByDescriptionContains(kw, PageRequest.of(page, 5));
+        }
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("listArticle", articles.getContent());
+        model.addAttribute("pages", new int[articles.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("keyword", kw);
+        model.addAttribute("selectedCategoryId", categoryId);
         return "articles";
     }
 
@@ -55,26 +62,35 @@ public class ArticleController {
     @PostMapping("/save")
     public String save(@Valid Article article, BindingResult bindingResult){
         if(bindingResult.hasErrors())  return "article";
+        if (article.getCategory() !=null) {
+            Category category = categoryRepository.findById(article.getCategory().getId()).orElse(null);
+            if (category != null) {
+                article.setCategory(category);
+            }
+        }
+        System.out.println(article);
         articleRepository.save(article);
         return "redirect:/index";
 
     }
 
-    @GetMapping("/categories")
-    public String categories(Model model) {
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "categories";
-    }
+//    @GetMapping("/category")
+//    public String category(Model model, @RequestParam Long id, @RequestParam(name="page", defaultValue="0") int page) {
+//        Category category = categoryRepository.findById(id).orElse(null);
+//        Page<Article> articles = articleRepository.findByCategory(category, PageRequest.of(page,5));
+//        model.addAttribute("listArticle", articles.getContent());
+//        model.addAttribute("pages", new int[articles.getTotalPages()]);
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("categories", categoryRepository.findAll());
+//        model.addAttribute("selectedCategory", category);
+//        return "articles";
+//    }
 
-    @GetMapping("/category")
-    public String category(Model model, @RequestParam Long id, @RequestParam(name="page", defaultValue="0") int page) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        Page<Article> articles = articleRepository.findByCategory(category, PageRequest.of(page,5));
-        model.addAttribute("listArticle", articles.getContent());
-        model.addAttribute("pages", new int[articles.getTotalPages()]);
-        model.addAttribute("currentPage", page);
+    @GetMapping("/edit")
+    public String edit(Model model, @RequestParam Long id){
+        Article article = articleRepository.findById(id).orElse(null);
+        model.addAttribute("article", article);
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("selectedCategory", category);
-        return "articles";
+        return "article";
     }
 }

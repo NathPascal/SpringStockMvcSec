@@ -16,7 +16,7 @@
             <nav>
                 <ul class="pagination justify-content-center">
                     <li th:each="category : ${categories}" class="page-item">
-                        <a th:href="@{/category(id=${category.id})}" th:text="${category.name}" class="page-link"></a>
+                        <a th:href="@{/index(categoryId=${category.id})}" th:text="${category.name}" class="page-link"></a>
                     </li>
                 </ul>
             </nav>
@@ -51,19 +51,20 @@
                         <td th:text="${a.price}"></td>
                         <td>
                             <a th:href="@{/delete(id=${a.id}, page=${currentPage}, keyword=${keyword})}"
-                               class="btn btn-danger btn-sm">Delete</a>
+                               class="btn btn-danger btn-sm pe-5">Delete</a>
+                            <a th:href="@{/edit(id=${a.id})}" class="btn btn-primary btn-sm ps-5">Edit</a>
                         </td>
                     </tr>
                 </table>
-                <ul class="pagination justify-content-center">
-                    <li th:class="${currentPage==status.index}?'active':''" th:each="page, status:${pages}"
-                        class="page-item"><a
-                            th:href="@{/index(page=${status.index},keyword=${keyword})}" th:text="${status.index}"
-                            class="page-link"></a></li>
-                </ul>
             </div>
+            <ul class="pagination justify-content-center pt-3">
+                <li th:class="${currentPage==status.index}?'active':''" th:each="page, status:${pages}"
+                    class="page-item"><a
+                        th:href="@{/index(page=${status.index},keyword=${keyword},categoryId=${selectedCategoryId})}" th:text="${status.index}"
+                        class="page-link"></a>
+                </li>
+            </ul>
         </div>
     </div>
-
 </body>
 </html>
