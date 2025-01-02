@@ -30,8 +30,5 @@ public class Article implements Serializable{
     private double price;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
-
-
 }

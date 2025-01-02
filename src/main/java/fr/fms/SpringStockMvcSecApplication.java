@@ -24,15 +24,15 @@ public class SpringStockMvcSecApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 //		try {
-//			Category smartphone = categoryRepository.save(new Category(null, "Smartphone"));
-//			Category ordinateur = categoryRepository.save(new Category(null, "Ordinateur"));
-//			Category tablette = categoryRepository.save(new Category(null, "Tablette"));
-//			Category imprimante = categoryRepository.save(new Category(null, "Imprimante"));
-//			Category camera = categoryRepository.save(new Category(null, "Camera"));
-//			Category tv = categoryRepository.save(new Category(null, "TV"));
-//			Category telescope = categoryRepository.save(new Category(null, "Telescope"));
-//			Category gps = categoryRepository.save(new Category(null, "Gps"));
-//			Category enceinte = categoryRepository.save(new Category(null, "Enceinte"));
+//			Category smartphone = categoryRepository.save(new Category(null, "Smartphone", null));
+//			Category ordinateur = categoryRepository.save(new Category(null, "Ordinateur", null));
+//			Category tablette = categoryRepository.save(new Category(null, "Tablette", null));
+//			Category imprimante = categoryRepository.save(new Category(null, "Imprimante", null));
+//			Category camera = categoryRepository.save(new Category(null, "Camera", null));
+//			Category tv = categoryRepository.save(new Category(null, "TV", null));
+//			Category telescope = categoryRepository.save(new Category(null, "Telescope", null));
+//			Category gps = categoryRepository.save(new Category(null, "Gps", null));
+//			Category enceinte = categoryRepository.save(new Category(null, "Enceinte", null));
 //
 //			articleRepository.save(new Article(null, "Samsung Galaxy S8", 250, smartphone));
 //			articleRepository.save(new Article(null, "Samsung Galaxy S9", 300, smartphone));

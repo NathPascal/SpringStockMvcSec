@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor @ToString
+@Data @NoArgsConstructor @AllArgsConstructor @ToString(exclude = "articles")
 public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -22,12 +22,7 @@ public class Category implements Serializable {
     @NotNull
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "category")
     private List<Article> articles;
-
-    public Category(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
 }
