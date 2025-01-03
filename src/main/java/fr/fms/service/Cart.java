@@ -18,4 +18,8 @@ public class Cart implements Serializable {
     public List<Article> getItems(){
         return items;
     }
+
+    public double getTotalPrice(){
+        return items.stream().mapToDouble(Article::getPrice).sum();
+    }
 }
