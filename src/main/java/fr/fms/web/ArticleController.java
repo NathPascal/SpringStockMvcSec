@@ -1,5 +1,7 @@
 package fr.fms.web;
 
+import fr.fms.dao.CustomerRepository;
+import fr.fms.entities.Customer;
 import fr.fms.service.Cart;
 import fr.fms.dao.ArticleRepository;
 import fr.fms.dao.CategoryRepository;
@@ -25,6 +27,9 @@ public class ArticleController {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
 
     @GetMapping("/index")
     public String index(Model model, @RequestParam(name="page", defaultValue = "0") int page,
@@ -109,5 +114,50 @@ public class ArticleController {
 
         model.addAttribute("cart", cart);
         return "cart";
+    }
+
+    @PostMapping("/validateCart")
+    public String validateCart(HttpSession httpSession, Model model) {
+        Cart cart = (Cart) httpSession.getAttribute("cart");
+        if (cart == null || cart.getItems().isEmpty()) {
+            model.addAttribute("error", "Votre panier est vide.");
+            return "cart";
+        }
+        return "redirect:/customer";
+    }
+
+    @GetMapping("/customer")
+    public String customerForm(Model model) {
+        model.addAttribute("customer", new Customer());
+        return "customer";
+    }
+
+    @PostMapping("/createCustomer")
+    public String createCustomer(@Valid Customer customer, HttpSession httpSession, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "customer";
+        }
+        customerRepository.save(customer);
+        httpSession.setAttribute("customer", customer);
+        return "redirect:/order";
+    }
+
+    @GetMapping("/order")
+    public String order(HttpSession httpSession, Model model){
+        Cart cart = (Cart) httpSession.getAttribute("cart");
+        Customer customer = (Customer) httpSession.getAttribute("customer");
+        if (cart == null || cart.getItems().isEmpty() || customer == null) {
+            return "redirect:/cart";
+        }
+        model.addAttribute("cart", cart);
+        model.addAttribute("customer", customer);
+        return "order";
+    }
+
+    @PostMapping("/confirmOrder")
+    public String confirmOrder(HttpSession httpSession){
+        httpSession.removeAttribute("cart");
+        httpSession.removeAttribute("customer");
+        return "redirect:/index";
     }
 }

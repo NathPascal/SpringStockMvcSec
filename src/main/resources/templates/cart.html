@@ -9,25 +9,26 @@
 </head>
 
 <body>
-<div layout:fragment="content">
-<div class="container mt-5">
-  <h2>Votre Panier</h2>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>Description</th>
-      <th>Prix</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="item : ${cart.items}">
-      <td th:text="${item.description}"></td>
-      <td th:text="${item.price}"></td>
-    </tr>
-    </tbody>
-  </table>
-  <button class="btn btn-primary">Valider</button>
-</div>
-</div>
+  <div layout:fragment="content">
+    <div class="container mt-5">
+      <h2>Votre Panier</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Prix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="item : ${cart.items}">
+            <td th:text="${item.description}"></td>
+            <td th:text="${item.price}"></td>
+          </tr>
+        </tbody>
+      </table>
+      <form th:action="@{/validateCart}" method="post">
+      <button type="submit" class="btn btn-primary">Valider</button></form>
+    </div>
+  </div>
 </body>
 </html>

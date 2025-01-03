@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout"
+      lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Résumé commande</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="container mt-5">
+    <h2>Récapitulatif de la commande</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Informations du client</h3>
+        <table class="table table-striped">
+          <tr>
+            <th>Nom</th>
+            <td th:text="${customer.lastName}"></td>
+          </tr>
+          <tr>
+            <th>Prénom</th>
+            <td th:text="${customer.firstName}"></td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td th:text="${customer.email}"></td>
+          </tr>
+          <tr>
+            <th>Adresse</th>
+            <td th:text="${customer.address}"></td>
+          </tr>
+          <tr>
+            <th>Téléphone</th>
+            <td th:text="${customer.phone}"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <h3>Commande</h3>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Description</th>
+            <th>Prix</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="item : ${cart.items}">
+            <td th:text="${item.description}"></td>
+            <td th:text="${item.price}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <form th:action="@{/confirmOrder}" method="post">
+      <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
