@@ -22,14 +22,17 @@ import javax.validation.Valid;
 
 @Controller
 public class ArticleController {
-    @Autowired
-    ArticleRepository articleRepository;
+
+    private final ArticleRepository articleRepository;
+    private final CategoryRepository categoryRepository;
+    private final CustomerRepository customerRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
-
-    @Autowired
-    CustomerRepository customerRepository;
+    public ArticleController(ArticleRepository articleRepository, CategoryRepository categoryRepository, CustomerRepository customerRepository ){
+        this.articleRepository = articleRepository;
+        this.categoryRepository = categoryRepository;
+        this.customerRepository = customerRepository;
+    }
 
     @GetMapping("/index")
     public String index(Model model, @RequestParam(name="page", defaultValue = "0") int page,

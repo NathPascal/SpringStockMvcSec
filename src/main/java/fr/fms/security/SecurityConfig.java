@@ -16,15 +16,16 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final DataSource dataSource;
+
     @Autowired
-    DataSource dataSource;
+    public SecurityConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-//        PasswordEncoder pe = passwordEncoder();
-//        auth.inMemoryAuthentication().withUser("mohamed").password(pe.encode("12345")).roles("ADMIN","USER");
-//        auth.inMemoryAuthentication().withUser("aymene").password(pe.encode("12345")).roles("USER");
-//        auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder());
 
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
