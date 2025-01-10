@@ -13,12 +13,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ArticleController {
@@ -34,6 +35,9 @@ public class ArticleController {
         this.customerRepository = customerRepository;
     }
 
+    @Autowired
+    Cart cart;
+
     @GetMapping("/index")
     public String index(Model model, @RequestParam(name="page", defaultValue = "0") int page,
                         @RequestParam(name = "keyword", defaultValue = "") String kw,
@@ -45,12 +49,24 @@ public class ArticleController {
         } else {
             articles = articleRepository.findByDescriptionContains(kw, PageRequest.of(page, 5));
         }
+
+        List<Object[]> totalArticles = articleRepository.countArticlesByCategory();
+        Map<String, Long> totalArticlesByCategory = new HashMap<>();
+        for (Object[] articleData : totalArticles) {
+            Category category = (Category) articleData[0];
+            Long count = (Long) articleData[1];
+
+            totalArticlesByCategory.put(category.getName(), count);
+        }
+
+
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("listArticle", articles.getContent());
         model.addAttribute("pages", new int[articles.getTotalPages()]);
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", kw);
         model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("totalArticlesByCategory", totalArticlesByCategory);
         return "articles";
     }
 
@@ -163,4 +179,11 @@ public class ArticleController {
         httpSession.removeAttribute("customer");
         return "redirect:/index";
     }
+
+    @RequestMapping("/greating")
+    public @ResponseBody String home(){
+        return cart.great();
+    }
+
+
 }
